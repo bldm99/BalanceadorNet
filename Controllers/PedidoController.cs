@@ -4,11 +4,13 @@ using Newtonsoft.Json;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using Api.Models;
+using Microsoft.AspNetCore.Cors;
 
 namespace Api.Controllers
 {
     [ApiController]
     [Route("prueba")]
+    
     public class PedidoController : ControllerBase
     {
         private readonly HttpClient _httpClient;
@@ -20,6 +22,7 @@ namespace Api.Controllers
 
         [HttpGet]
         [Route("listar")]
+        
         public async Task<IActionResult> Listar()
         {
             var apiUrl = "https://teamapi.bladimirchipana.repl.co/pruebas"; // Nombre de nuestra API

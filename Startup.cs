@@ -4,7 +4,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-
 namespace Api
 {
     public class Startup
@@ -16,29 +15,28 @@ namespace Api
 
         public IConfiguration Configuration { get; }
 
-        // Este método se utiliza para configurar los servicios que tu aplicación usará.
         public void ConfigureServices(IServiceCollection services)
         {
-            // Agregar servicios necesarios aquí
-            services.AddControllers();
+            // ... Otras configuraciones de servicios ...
 
-            // Configuración de IHttpClientFactory
-            services.AddHttpClient();
-           
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAnyOrigin", builder =>
+                {
+                    builder.AllowAnyOrigin()
+                           .AllowAnyMethod()
+                           .AllowAnyHeader();
+                });
+            });
+
+            services.AddControllers();
         }
 
-        // Este método se utiliza para configurar la canalización de solicitud HTTP.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+       public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-            else
-            {
-                app.UseExceptionHandler("/Home/Error");
-                app.UseHsts();
-            }
+            
+            // Configurar CORS antes de UseRouting y UseEndpoints
+            app.UseCors("AllowAnyOrigin");
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
@@ -52,5 +50,6 @@ namespace Api
                 endpoints.MapControllers(); // Mapear controladores API
             });
         }
+
     }
 }
