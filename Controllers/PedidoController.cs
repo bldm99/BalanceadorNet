@@ -9,11 +9,11 @@ namespace Api.Controllers
 {
     [ApiController]
     [Route("prueba")]
-    public class RopaController : ControllerBase
+    public class PedidoController : ControllerBase
     {
         private readonly HttpClient _httpClient;
 
-        public RopaController()
+        public PedidoController()
         {
             _httpClient = new HttpClient();
         }
@@ -22,8 +22,7 @@ namespace Api.Controllers
         [Route("listar")]
         public async Task<IActionResult> Listar()
         {
-            // Especifica la URL de la API externa de donde deseas obtener los datos de Pedidos
-            var apiUrl = "https://teamapi.bladimirchipana.repl.co/pruebas"; // Reemplaza con la URL correcta
+            var apiUrl = "https://teamapi.bladimirchipana.repl.co/pruebas"; // Nombre de nuestra API
 
             try
             {
