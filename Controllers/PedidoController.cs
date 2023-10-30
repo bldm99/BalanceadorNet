@@ -23,10 +23,13 @@ namespace Api.Controllers
         [HttpGet]
         [Route("listar")]
         
-        public async Task<IActionResult> Listar()
+        //public async Task<IActionResult> Listar()
+        public async Task<IActionResult> Listar([FromQuery] string _id)
+    
         {
-            var apiUrl = "https://teamapi.bladimirchipana.repl.co/pruebas"; // Nombre de nuestra API
-
+            //var apiUrl0 = "https://teamapi.bladimirchipana.repl.co/pruebas"; // Nombre de nuestra API
+            var apiUrl = $"https://teamapi.bladimirchipana.repl.co/pedidos?_id={_id}"; // Nombre de nuestra API
+            //var apiUrl = "https://teamapi.bladimirchipana.repl.co/pedidos?_id=64ab919927009eb117951833"; 
             try
             {
                 // Realiza una solicitud GET a la API externa
@@ -38,9 +41,11 @@ namespace Api.Controllers
                     var content = await response.Content.ReadAsStringAsync();
 
                     // Deserializa los datos de la respuesta JSON a una lista de objetos Tienda
-                    var tiendas = JsonConvert.DeserializeObject<List<Tienda>>(content);
+                    //var tiendas = JsonConvert.DeserializeObject<List<Tienda>>(content);
+                    var pedidosx = JsonConvert.DeserializeObject<List<Pedidos>>(content);
+                    
 
-                    // Extrae solo los datos de Pedidos de todas las Tiendas
+                    /*// Extrae solo los datos de Pedidos de todas las Tiendas
                     var pedidos = new List<Pedidos>();
                     foreach (var tienda in tiendas)
                     {
@@ -51,7 +56,10 @@ namespace Api.Controllers
                     }
 
                     // Devuelve los datos de Pedidos obtenidos en la respuesta
-                    return Ok(pedidos);
+                    return Ok(pedidos);*/
+                    return Ok(pedidosx);
+                    
+
                 }
                 else
                 {
