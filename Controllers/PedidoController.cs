@@ -6,30 +6,40 @@ using System.Collections.Generic;
 using Api.Models;
 using Microsoft.AspNetCore.Cors;
 
+
+
 namespace Api.Controllers
 {
     [ApiController]
     [Route("prueba")]
-    
+
     public class PedidoController : ControllerBase
     {
         private readonly HttpClient _httpClient;
 
-        public PedidoController()
+        /*public PedidoController()
         {
             _httpClient = new HttpClient();
+        }*/
+        public PedidoController(IHttpClientFactory httpClientFactory)
+        {
+            _httpClient = httpClientFactory.CreateClient();
         }
+
 
         [HttpGet]
         [Route("listar")]
-        
+
         //public async Task<IActionResult> Listar()
         public async Task<IActionResult> Listar([FromQuery] string _id)
-    
+
         {
             //var apiUrl0 = "https://teamapi.bladimirchipana.repl.co/pruebas"; // Nombre de nuestra API
-            var apiUrl = $"https://teamapi.bladimirchipana.repl.co/pedidos?_id={_id}"; // Nombre de nuestra API
-            //var apiUrl = "https://teamapi.bladimirchipana.repl.co/pedidos?_id=64ab919927009eb117951833"; 
+            //var apiUrl = $"https://teamapi.bladimirchipana.repl.co/pedidos?_id={_id}"; // Nombre de nuestra API
+            //var apiUrl = "https://teamapi.bladimirchipana.repl.co/pedidos?_id=64ab919927009eb117951833";
+
+            //https://girapi.bladimirchipana.repl.co/registromacro?_id=6531d08612ec096c58717b97 
+            var apiUrl = $"https://girapi.bladimirchipana.repl.co/registromacro?_id={_id}";
             try
             {
                 // Realiza una solicitud GET a la API externa
@@ -42,8 +52,22 @@ namespace Api.Controllers
 
                     // Deserializa los datos de la respuesta JSON a una lista de objetos Tienda
                     //var tiendas = JsonConvert.DeserializeObject<List<Tienda>>(content);
-                    var pedidosx = JsonConvert.DeserializeObject<List<Pedidos>>(content);
-                    
+                    //var pedidosx = JsonConvert.DeserializeObject<List<Pedidos>>(content);
+
+                    var macros = JsonConvert.DeserializeObject<List<Procesos>>(content);
+                    var riesgos = new List<Mriesgos>();
+                    foreach (var x in macros)
+                    {
+                        if (x.m_riesgos != null)
+                        {
+                            riesgos.AddRange(x.m_riesgos);
+                        }
+                    }
+
+                    var riesgosUnicos = riesgos
+                        .GroupBy(r => r.nombre)
+                        .Select(grp => grp.First())
+                        .ToList();
 
                     /*// Extrae solo los datos de Pedidos de todas las Tiendas
                     var pedidos = new List<Pedidos>();
@@ -57,8 +81,9 @@ namespace Api.Controllers
 
                     // Devuelve los datos de Pedidos obtenidos en la respuesta
                     return Ok(pedidos);*/
-                    return Ok(pedidosx);
-                    
+                    //return Ok(pedidosx);
+                    return Ok(riesgosUnicos);
+
 
                 }
                 else

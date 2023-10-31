@@ -2,6 +2,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 var  MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
+builder.Services.AddHttpClient(); //change importnant for api for api
+
 // Add services to the container.
 
 builder.Services.AddControllers();
